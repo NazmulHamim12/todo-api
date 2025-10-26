@@ -81,16 +81,16 @@ WSGI_APPLICATION = 'todo.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'railway',   # Database name
-        'USER': 'postgres',  # User
-        'PASSWORD': os.getenv('DB_PASS'),  # Supabase panel থেকে copy করা
-        'HOST': 'mainline.proxy.rlwy.net',  # Host
-        'PORT': '56668',  # Port
+        'NAME': 'railway',   
+        'USER': 'postgres',  
+        'PASSWORD': os.getenv('DB_PASS'), 
+        'HOST': 'mainline.proxy.rlwy.net', 
+        'PORT': '56668',  
 
     }
 }
 
-#ZSBJIdDvmBrrqUTwDasOBhlguQOmsQiR
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -133,4 +133,5 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 
