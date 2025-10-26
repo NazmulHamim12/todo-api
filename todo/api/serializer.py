@@ -3,9 +3,7 @@ from . models import Todo
 
 
 
-class TodoSerializer(serializers.Serializer):
-    task=serializers.CharField(max_length=100)
-    
-    
-    def create(self, validated_data):
-        return Todo.objects.create(**validated_data)
+class TodoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Todo
+        fields=['id','task','prio']
