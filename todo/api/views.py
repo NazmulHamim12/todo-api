@@ -1,46 +1,66 @@
 from django.shortcuts import render
-
-from django.http import HttpResponse
-
 from .models import Todo
 from .serializer import TodoSerializer
 
-from rest_framework.renderers import JSONRenderer
-from django.views.decorators.csrf import csrf_exempt
-import io
-from rest_framework.parsers import JSONParser
-# Create your views here.
-
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework.views import APIView
 # Create your views here.
 
 
-
-
-def taskinfo(request):
-    com=Todo.objects.all()
-    py_data=TodoSerializer(com,many=True)
-    json_data=JSONRenderer().render(py_data.data)
+class Taskinfo(APIView):
     
-    return HttpResponse(json_data,content_type='application/json')
-
-
-
-
-
-@csrf_exempt
-def task_add(request):
-    if request.method == 'POST':
-        json_data=request.body
-        stream=io.BytesIO(json_data)
-        py_data=JSONParser().parse(stream)
-        com=TodoSerializer(data=py_data)
+    def get(self,request,pk=None,format=None):
+        id = pk
         
         
+        if id is not None:
+            com=Todo.objects.get(pk=id)
+            pydata=TodoSerializer(com)
+            return Response(pydata.data)
+        
+        com=Todo.objects.all()
+        pydata=TodoSerializer(com,many=True)
+        return Response(pydata.data)
+            
+            
+    def post(self,request,format=None):
+        
+        com=TodoSerializer(data=request.data)
         if com.is_valid():
             com.save()
-            res={'msg':'Task Save'}
-            json_data=JSONRenderer().render(res)
-            return HttpResponse(json_data,content_type='application/json')
+            return Response({'msg':'Data insert done'})
         
-        eror=JSONRenderer().render(com.errors)
-        return HttpResponse(eror,content_type='application/json')
+        return Response(com.errors)
+    
+    def put(self,request,pk,format=None):
+        id=pk
+        user_data=Todo.objects.get(pk=id)
+        exchange_data=TodoSerializer(user_data,data=request.data)
+        
+        if exchange_data.is_valid():
+            exchange_data.save()
+            return Response({'msg':'Full data update'})
+        
+        return Response(exchange_data.errors)
+    
+    def patch(self,request,pk,format=None):
+        id=pk
+        user_data=Todo.objects.get(pk=id)
+        exchange_data=TodoSerializer(user_data,data=request.data,partial=True)
+        
+        if exchange_data.is_valid():
+            exchange_data.save()
+            return Response({'msg':'Partial data update'})
+        
+        return Response(exchange_data.errors)
+    
+    
+    def delete(self,request,pk,format=None):
+        id=pk
+        data=Todo.objects.get(pk=id)
+        data.delete()
+        return Response({'msg':'Delete data'})
+            
+        
+
