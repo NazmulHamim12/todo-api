@@ -1,11 +1,78 @@
 from django.shortcuts import render
-from .models import Todo
-from .serializer import TodoSerializer
+from .models import Todo,Sing_up
+from .serializer import TodoSerializer,SingupSerializer
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 # Create your views here.
+
+
+
+class Singup(APIView):
+    def post(self,request,formate=None):
+        data=SingupSerializer(data=request.data)
+        if data.is_valid():
+            data.save()
+            return Response(
+                {'Msg':'Your account creat'}
+            )
+            
+        return Response(data.errors)
+    
+    
+    
+class LoginView(APIView):
+    def post(self,request,format=None):
+        email=request.data.get('email')
+        password=request.data.get('password')
+        
+        try:
+            user=Sing_up.objects.get(email=email,password=password)
+        except Sing_up.DoesNotExist:
+            return Response({'msg':"User not found"})
+        
+        serializer=SingupSerializer(user)
+        data=serializer.data
+        data.pop('password', None)
+        return Response(
+            {
+                'msg':'User Found',
+                'detail':data
+                
+            }
+        )
+        
+        
+        
+        
+class ProfileView(APIView):
+    def get(self,request,pk,format=None):
+        try:
+            user=Sing_up.objects.get(pk=pk)
+        except Sing_up.DoesNotExist:
+            return Response({'msg':'user data not found'})
+        
+        task=Todo.objects.filter(user=user)
+        task_data=TodoSerializer(task,many=True)
+        serializer=SingupSerializer(user)
+        data=serializer.data
+        data.pop('password', None)
+        
+        return Response(
+            {
+                
+                'detail':data,
+                'task':task_data.data
+            }
+        )
+
+
+
+
+
+
+
 
 
 class Taskinfo(APIView):
