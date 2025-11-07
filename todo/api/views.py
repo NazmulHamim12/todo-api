@@ -5,7 +5,7 @@ from .serializer import TodoSerializer,SingupSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
-# Create your views here.
+
 
 
 
@@ -130,4 +130,5 @@ class Taskinfo(APIView):
         return Response({'msg':'Delete data'})
             
         
+
 
