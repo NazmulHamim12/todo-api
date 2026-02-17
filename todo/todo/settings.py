@@ -70,10 +70,10 @@ WSGI_APPLICATION = 'todo.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'aws-1-ap-southeast-2.pooler.supabase.com',
+        'NAME': 'postgres',
         'USER': 'postgres.usrodzchwfxtldcjwsvg',
         'PASSWORD': os.environ.get("DB_PASSWORD"),
-        'HOST': 'aws-1-ap-southeast-1.pooler.supabase.com',
+        'HOST': 'aws-1-ap-southeast-2.pooler.supabase.com',
         'PORT': '6543',
         'pool_mode':"transaction",
 
@@ -128,6 +128,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 
 
 
